@@ -1,0 +1,411 @@
+\chapter{Introduction à la correction d'algorithmes}
+\newenvironment{question}{\begin{center}<< \bfseries\itshape}{ >>\end{center}}
+%\tcbuselibrary{theorems}
+\newtcbtheorem[number within=chapter]{exemple}{Exemple}%
+{colback=black!5!white,width=.95\linewidth,center,
+colframe=black!25!white,leftrule=3mm, rightrule=0mm, bottomrule=0mm, toprule=0mm,
+boxsep=0mm,boxed title style={empty,size=minimal},fonttitle=\bfseries,coltitle=black,
+enhanced,separator sign dash,attach boxed title to top left,left=2mm,right=0mm}{def}
+
+\section{Description générale}
+\begin{itemize}
+	\item {\bfseries Niveau :} Première NSI
+	\item {\bfseries Rubrique :} Algorithmique
+	\item {\bfseries Pré-requis :}
+	Constructions élémentaires (Boucle , conditionnellep) 
+	\item {\bfseries Motivation :} L'activité proposée ici est motivée par l'idée d'introduire, au lycée dans une classe de première en NSI, la notion d'\textbf{invariant} (et éventuellement de variant). L'idée est de solliciter la mémoire tactile, associée de plus à la notion de jeux. Cette activité consiste à étudier la correction partielle d'un algorithme de distribution de cartes.
+	\item {\bfseries Matériel :} Des paquets de cartes à jouer. (Activité débranchée.)
+	\item {\bfseries Durée :} 1 heure.
+\end{itemize}
+
+\section{Lien avec le programme officiel}
+
+\subsection{Texte au BO}
+
+{\bfseries Algorithmique}
+
+Il est nécessaire de montrer l'intérêt de prouver la \surligneur{correction} d'un algorithme pour lequel on dispose d'une spécification précise, notamment en mobilisant la notion d'\surligneur{invariant} sur des exemples simples. La nécessité de prouver la \surligneur{terminaison} d'un programme est mise en évidence dès qu'on utilise une boucle non bornée (ou, en terminale, des fonctions récursives) grâce à la mobilisation de la notion de \surligneur{variant} sur des exemples simples.
+
+\definecolor{bo}{RGB}{23,129,142}
+\definecolor{titre}{RGB}{200,200,200}
+\begin{center}\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{|L{0.2\textwidth}|L{0.35\textwidth}|L{0.35\textwidth}|}\hline
+\cellcolor{bo}\bfseries\textcolor{white}{Contenus}&
+\cellcolor{bo}\bfseries\textcolor{white}{Capacités attendues}&
+\cellcolor{bo}\bfseries\textcolor{white}{Commentaires}\\ \hline
+  Tris par insertion, par sélection
+& Décrire un \surligneur{invariant} de boucle qui prouve la \surligneur{correction} [...]
+& La \surligneur{terminaison} de ces algorithmes est à justifier.\\ \hline
+  Recherche dichotomique dans un tableau trié
+& Montrer la \surligneur{terminaison} [...] à l'aide d'un \surligneur{variant} de boucle.
+& La preuve de la \surligneur{correction} peut être présentée par le professeur.\\ \hline
+\end{tabular}
+\end{center}
+
+{\bfseries Spécification}
+
+\begin{center}\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{|L{0.2\textwidth}|L{0.35\textwidth}|L{0.35\textwidth}|}\hline
+\cellcolor{bo}\bfseries\textcolor{white}{Contenus}&
+\cellcolor{bo}\bfseries\textcolor{white}{Capacités attendues}&
+\cellcolor{bo}\bfseries\textcolor{white}{Commentaires}\\ \hline
+
+Prototyper une fonction. &
+Décrire les \surligneur{préconditions} sur
+les arguments.
+
+Décrire des \surligneur{postconditions} sur
+les résultats.&
+Des assertions peuvent être
+utilisées pour garantir des
+préconditions ou des
+postconditions.\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Analyse}
+
+Les notions de variant et d'invariant permettant la correction d'algorithmes sont pointées, dans le programme officiel, sur les algorithmes de tri et de recherche dichotomique. Ces algorithmes ayant, pour les élèves, des difficultés intrinsèques, il nous semble qu'introduire les notions de variant et d'invariant doit se faire au préalable, << sur des exemples simples >>.
+
+D'autre part, ces algorithme de tri et de recherche, sont souvent introduits à l'aide d'activités  de manipulations, en particulier avec des cartes à jouer.
+
+L'idée de l'activité présentée ici est donc d'utiliser ce support (les cartes à jouer), et d'introduire ces notions (variant et invariant) à travers un algorithme simple (la distribution des cartes).
+
+Enfin, le choix a été fait de ne pas mélanger les deux notions. Cette activité est donc centrée sur la correction partielle (mais permet également très simplement d'engager le travail sur la terminaison).
+
+
+\section{Découpage de l'activité}
+
+
+{\centering\begin{longtable}{|C{3cm}|L{6cm}|L{6cm}|}\hline
+\cellcolor{titre}Étape & \cellcolor{titre}Activité enseignant & \cellcolor{titre}Activité Élève  \\ \hline\endhead
+Mise en place
+& Présente l'activité et fournit les paquets de cartes.
+& Répartition en groupes.
+\\ \hline
+\ding{192} Première distribution
+& Lance une distribution.
+& Un donneur par groupe distribue l'ensemble des cartes. 
+\\ 
+& Conduit aux post-conditions, formalise un algorithme de distribution.
+& Participe à définir : \frquote{bonne donne}, et à un algorithme de distribution.
+\\ \hline
+\ding{193} Seconde distribution : interrompue
+& Lance et interrompt une distribution.
+& Un (autre) donneur distribue une partie des cartes (fini un tour entamer). 
+\\ 
+& \frquote{Peut-on savoir si, jusqu'ici, il y a bonne donne ?} (vers un invariant)
+& Détermine un procédé de vérification et l'effectue (comptage d cartes).
+\\ \hline
+\ding{194} Seconde distribution : suite
+& Supervise les changements de tables.
+& Les groupes permutent en laissant les cartes sur place. 
+\\ 
+& Lance un tour de distribution.
+& Un donneur réalise un tour de distribution. 
+\\ 
+& \frquote{Peut-on savoir s'il, jusqu'ici, il y a bonne donne ?}
+& Propose une argumentation sans re-comptage.
+\\ 
+& Introduit le vocabulaire : \frquote{invariant}.
+& 
+\\ 
+& Propose de suivre l'état des variables pour justifier de l'invariant sur une itération.
+& Complète le tableau proposé.
+\\ \hline
+\ding{195} Seconde distribution : fin
+& Force une mauvaise donne sans invalider l'invariant.
+& Retourne à sa place et finit la distribution. 
+\\ 
+& \frquote{Y-a-t-il eu bonne donne ?}
+&  
+\\ 
+& Précise les post-conditions
+& Précise sa compréhension
+\\ 
+& Prouve la correction partielle
+& 
+\\ \hline
+\end{longtable}\par}
+
+\section{Mise en œuvre et analyse}
+
+Cette partie est le fruit de différentes mises en œuvres dans différentes classes de première, différentes années et par différents enseignants. 
+
+En {\itshape italique} sont mentionnées des expériences de classe, pour lesquelles \frquote{{\itshape je}} représente l'enseignant.
+
+\subsection{Mise en place}
+
+Il faut décider du nombre d'élèves et de cartes par groupe.
+
+Comme l'étape \ding{192} est une formalisation de la \frquote{bonne donne}, il est plus simple, pour engager cette discutions que le nombre de cartes ne soit pas un multiple du nombre d'élèves par groupe. Avec des jeux de 32 ou 52 cartes on cherche à faire des groupes de 3 ou 5 élèves. Avec des groupes de 4 élèves, on pourra ne pas donner des paquets entier ou y laisser les jokers.
+
+\subsection{Étape \ding{192} : première distribution}
+
+{\bfseries Objectif :} Écrire un algorithme simple et sa spécification (en particulier ses post-conditions).
+
+\medskip
+
+On demande, sans autre explication, à un élève par groupe de distribuer les cartes à son groupe.
+
+\begin{question}Comment peut-on être certain qu'il n'y a pas maldonne ?\end{question}
+
+\textit{Certains élèves n'ont jamais vraiment joué à un jeu de carte, et d'autres, qu'à certains jeux pour lesquels la notion de maldonne n'est pas réellement présente.}
+
+\textit{Un élève qui a surtout joué au << président >>, jeu pour lequel le gagnant est le premier qui se débarrasse de toutes ses cartes, demande à quel jeu on joue. Comme la distribution a apporté plus de cartes à certains qu'a d'autres il avait un problème d'équité. Je lui propose de me dire s'il connait d'autres jeux et les conséquences de ce genre de distribution. On cite le fait que certains jeux (belote par exemple) demandent un nombre précis de joueurs, et que dans d'autres (tarot par exemple) la distribution met de côté un chien. D'autres jeux ne distribuent tout simplement pas toutes les cartes.}
+
+À un moment de la discussion avec les élèves sur le sujet, on doit aider à trancher, pour ce que sera une << bonne donne >>.
+Cette décision est importante, car elle peut induire des raisonnements plus ou moins compliqués pour la correction partielle. On peut donner deux exemples :
+
+\begin{multicols}{2}
+
+\begin{exemple}[title = Au tableau]{}{}
+Il y a << bonne donne >> si 
+\begin{itemize}[leftmargin=*,label=$\star$]
+    \item chacun a obtenu autant de cartes
+    \item et il n'en reste plus à distribuer.
+\end{itemize} 
+\end{exemple}
+
+\columnbreak
+
+\begin{exemple}[title = Au tableau]{}{}
+Il y a << bonne donne >> si 
+\begin{itemize}[leftmargin=*,label=$\star$]
+    \item chacun a obtenu autant de cartes
+    \item et reste < nombre de joueurs.
+\end{itemize} 
+\end{exemple}
+
+\end{multicols}
+
+\textit{À la question de la maldonne, la plupart des élèves comptent leurs cartes, mais, même pour ceux qui ont laissés de côté les cartes en surnombre, personne ne pense à compter ces cartes pour vérifier que la distribution est finie, ni de faire la somme pour vérifier le nombre total de carte, sans parler de l'intégrité du paquet de départ.}
+
+\textit{Des élèves ont tout de suite parlé de division euclidienne, j'ai donc écrit $2\times6+8=20$, et j'ai demandé si c'était bien la division euclidienne de $20$ par $6$ ?  La condition sur le reste est arrivée tout de suite.}
+
+Il manque << l'ensemble des cartes est inchangé >> au tableau, mais il n'est pas pertinent de l'imposer de force ici. On pourra la mettre en évidence dans la distribution suivante. 
+
+La première possibilité suppose la mise en place d'un pré-traitement, pour que le nombre de cartes soit un multiple du nombre de joueurs. La correction en est simplifiée, mais permet moins de visibilité sur les points que l'on veut aborder.
+
+On (re)précise le vocabulaire lié  à la spécification, en particulier les {\bfseries post-conditions} et on termine cette partie en demandant un algorithme de distribution de cartes, que l'on peut, dans un premier temps, écrire sous la dictée d'un élève :
+
+\begin{exemple}[title = Au tableau]{}{}
+Tant qu'il reste plus de cartes que de joueurs,
+
+\quad | \quad    on distribue.
+\end{exemple}
+
+Encore une fois, ce n'est pas complet, mais la suite de l'activité permettra préciser les choses en vue, justement, d'une démonstration. 
+
+\subsection{Étape \ding{193} : seconde distribution interrompue}
+
+{\bfseries Objectif :} Conduire vers un invariant de boucle.
+
+\medskip
+
+On demande à un autre élève par groupe de distribuer les cartes. On interrompt la distribution avant la fin, et on demande de ne finir que le tour de distribution en cours.
+
+\begin{question}Peut-on savoir si, pour l'instant, la distribution est bonne, ou s'il y a maldonne ?
+\end{question}
+
+\textit{Une réponse vient facilement : chacun compte ses cartes pour savoir s'il en a autant que les autres. Encore une fois, il est difficile d'obtenir spontanément toute autre vérification.}
+
+
+\begin{exemple}[title = Au tableau]{}{}
+Vérification :
+\begin{itemize}[leftmargin=*,label=$\star$]
+    \item chacun a obtenu autant de cartes
+\end{itemize} 
+\end{exemple}
+
+On fait remarquer que c'est bien l'égalité des comptes et pas le nombre de cartes qui valide la réponse. Chaque groupe n'en est pas au même tour de distribution, mais peut conclure de la même façon. Cette proposition est un {\bfseries invariant}.
+
+Au tableau, c'est l'occasion s'esquisser un premier tableau de suivi de la situation :
+
+
+\begin{exemple}[title = Au tableau]{}{}
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c|}
+\cline{2-5}
+\bfseries Nombre de cartes du     & Joueur1 & Joueur2 & Joueur3 & Reste \\
+\hline
+entre deux tours de distribution   & $n$ & $n$ & $n$ &  $r$  \\
+
+\end{tabular}
+\end{center}
+\end{exemple}
+
+Selon comment les choses ont été menées en classe on peut avoir déjà obtenu un second invariant : le nombre total de cartes (plus précisément l'ensemble des carte). Sinon, c'est l'occasion de le mettre en valeur.
+
+\subsection{Étape \ding{194} : seconde distribution suite}
+
+{\bfseries Objectif :} Préciser la notion d'invariant de boucle et aller vers la correction partielle.
+
+\medskip
+
+On demande alors aux élèves de laisser leurs cartes à leur place et de changer de table de jeu.
+
+Au profit des hésitations et des déplacements, au moment du changement de table, on subtilise discrètement quelques cartes d'un paquet (du reste à distribuer). On peut également remplacer une des cartes par un joker, ou simplement l'y ajouter...
+
+Une fois chacun à sa nouvelle place, on demande aux nouveaux donneur de faire un tour de distribution seulement et aux autres d'observer sans toucher à rien. On demande alors :
+
+\begin{question} Peut-on savoir si la distribution est toujours bonne, sans toucher aux cartes ? \end{question}
+
+
+{\itshape
+\color{red}{Il manque un retour d'expérience ici je pense}
+}
+
+
+\textit{La mise en situation est suffisamment claire pour en tirer rapidement le raisonnement : Comme chacun avait autant de carte et en a obtenu une de plus alors chacun en a toujours autant.}
+
+On demande alors (si besoin) de préciser l'algorithme au tableau pour qu'il suive ce raisonnement. 
+
+\begin{exemple}[title = Au tableau]{}{}
+Tant qu'il reste plus de cartes que de joueurs,
+
+\quad | \quad    on distribue {\bfseries une carte à chacun}.
+\end{exemple}
+
+\textit{Une proposition moins précise d'un élève << on distribue autant de cartes à chacun >> est discutée. Si on distribue les cartes deux par deux, est-t-on sûr que ce sera toujours possible ? Pas s'il ne reste qu'une carte par joueur au dernier tour. Si d'autre part on s'autorise à distribuer un nombre différent à chaque tour, on perd trop de contrôle sur la situation pour espérer démontrer facilement qu'elle est valide.}
+
+Pour préciser le travail sur l'invariant, on demande :
+
+\begin{question} Peut-on dire qu'à tout moment dans la distribution, chaque joueur à autant de cartes ? \end{question}
+
+La réponse est << non >> physiquement, car les cartes ne sont pas distribuées simultanément à chaque joueur. Pour aider les élèves à décomposer toutes les étapes d'un tour de distribution on leur propose de remplir le tableau suivant :
+
+\begin{exemple}[title = Au tableau]{}{}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|l}
+\cline{1-5}
+\bfseries Nombre de cartes du     & Joueur1 & Joueur2 & Joueur3 & Reste & Autant chacun ?\\
+\hline
+Début d'une itération   & $n$ & $n$ & $n$ &  $r$  & oui\\
+Une carte pour Joueur1 &     &     &     &    &\\
+Une carte pour Joueur2 &     &     &     &    &\\
+Une carte pour Joueur3 &     &     &     &   & \\
+\cline{1-5}
+\end{tabular}
+
+Fin de d'itération
+\end{center}
+\end{exemple}
+
+\textit{Pas de difficulté particulière ici, on obtient $n+1$ cartes pour chaque joueur à la fin de l'itération.}
+
+
+On précise alors le vocabulaire : une proposition qui est vraie au début d'une itération de boucle, dont on peut démontrer qu'elle est de nouveau vérifiée à la fin de l'itération, est dite <<~{\bfseries{}invariante}~>> pour la boucle. On fait également remarquer deux choses :
+\begin{itemize}
+	\item L'invariant n'a évidemment pas besoin de rester vrai à tout moment dans la boucle.
+	\item L'invariant est un prédicat (une proposition booléenne) sur des valeurs qui, elles, peuvent varier.
+\end{itemize} 
+
+
+\begin{question}
+    En admettant que le donneur respecte bien cet algorithme (au tableau), ce que l'on vient d'écrire suffit-il à démontrer que chacun aura finalement autant de cartes ? 
+\end{question}
+
+\textit{Cette question est plus difficile. On peut guider la réponse en indiquant que, pour construire notre raisonnement, on a, à un moment, dû compter les cartes. Peut-on s'en passer ? On peut alors remonter le raisonnement à son origine pour constater qu'à l'initialisation, si aucun joueur n'a de carte, on peut démarrer le raisonnement sans avoir besoin de compter.}
+
+\begin{exemple}[title = Au tableau]{}{}
+\begin{center}
+Invariant : Tous les joueurs ont le même nombre de cartes.
+\begin{tabular}{|c|c|c|c|c||c|}
+\hline
+Avant &  $0$    &   $0$   &   $0$   &   $N$   & \surligneur[white]{vrai}\\
+\hline
+\hline
+\bfseries Nombre de cartes du     & Joueur1 & Joueur2 & Joueur3 & Reste & \bfseries invariant\\
+\hline
+Début d'une itération   &   $n$   &   $n$   &   $n$   &  $r$  & supposé\\
+Une carte pour Joueur1      &  $n+1$  &   $n$   &   $n$   &  $r-1$  & faux\\
+Une carte pour Joueur2      &  $n+1$  &  $n+1$  &   $n$   &  $r-2$  & faux\\
+Une carte pour Joueur3   &  $n+1$  &  $n+1$  &  $n+1$  &  $r-3$  & \surligneur[white]{vrai}\\
+\hline
+\hline
+Après &  ?  &  ?  &  ?  &  ?  & Donc vrai\\
+\hline
+\end{tabular}
+\end{center}
+\end{exemple}
+
+On ne cherche volontairement pas à compléter la dernière ligne : c'est le raisonnement en lui-même qui prouve que l'invariant est vrai à la fin et non le calcul des valeurs.
+
+C'est le moment de formaliser, en donnant une définition.
+
+\begin{center}\fbox{\begin{minipage}{.9\linewidth}
+Un {\bfseries invariant de boucle} est une proposition, 
+\begin{itemize}
+    \item vraie avant la première itération de la boucle,
+    \item qui reste vraie à la fin d'une itération si elle l'était au début.
+\end{itemize}
+Un invariant est donc automatiquement vrai quand la boucle se termine.
+\end{minipage}}\end{center}
+
+On fait alors remarquer que cela démontre une partie de la post-condition proposée. On introduit le vocabulaire : {\bfseries correction partielle}. On précise qu'elle est partielle car si on démontre que la post-condition est vérifiée quand la boucle termine, il reste à démontre qu'elle termine effectivement.
+
+\subsection{Étape \ding{195} : seconde distribution fin}
+
+{\bfseries Objectif :} Déterminer les invariants pour compléter la correction partielle.
+
+\medskip
+
+L'idée est que les manipulations de paquet faites pendant les changements de place provoque de fausses donnes tout en respectant l'invariant précédemment démontré. On demande donc à chacun de retourner à sa place et de finir la donne.
+
+\begin{question}
+    Les jeux de cartes ont-ils tous été bien distribués, ou y a-t-il eu maldonne ?
+\end{question}
+
+\textit{On conclue assez facilement que la donne a été faussée. Cependant, on remet les élèves face à leur énoncé de la post-condition : << chaque joueur a-t-il obtenu autant de cartes ? >>, et << reste-t-il plus de cartes à distribuer que de joueurs ? >>. Ces questions ne suffisent pas à détecter la fausse donne. Que manque-t-il alors à la post-condition ?}
+
+\begin{exemple}[title = Au tableau]{}{}
+Le jeu est << bien distribué >> si 
+\begin{itemize}[leftmargin=*,label=$\star$]
+    \item chaque joueur a obtenu autant de cartes
+    \item il en reste à distribuer strictement moins que de joueurs
+    \item et l'ensemble des carte est inchangé.
+\end{itemize} 
+\end{exemple}
+
+\begin{question}
+Comment démontrer cette troisième condition ? 
+\end{question}
+
+Le but est de réécrire le raisonnement précédent sur une condition simple. L'invariant étant la proposition elle-même. L'ensemble des cartes étant constitué de celles de chaque joueur et de celles encore à distribuer :
+
+
+\begin{itemize}
+    \item Avant la boucle, l'ensemble des cartes n'a pas changé (pas de pré-traitement à examiner).
+    \item S'il n'a pas changé au début d'une itération, le fait de retirer une carte de celles à distribuer pour la donner à un joueur ne le change pas, donc il reste inchangé à la fin de l'itération.
+\end{itemize}
+
+\begin{question}
+   Pour terminer la correction partielle, comment prouver la dernière post-condition ? 	
+\end{question}
+
+\textit{Cette question est facilement confondue par les élèves avec une preuve de terminaison. Pour eux, comme << il y a un nombre fini de cartes >>, au bout d'un moment, il n'y en aura plus à distribuer. On fait alors remarquer que cela signifie que la distribution se termine  : c'est l'autre partie de la preuve de correction. Pour la correction partielle, il ne s'agit pas de savoir ici si ça se termine, mais si ça termine bien.}
+
+En admettant que l'algorithme termine, alors la condition de la boucle, à la fin de la dernière itération, est fausse, ce qui donne directement le résultat.
+
+On peut alors proposer un schéma de preuve plus formel. Pour un invariant $I$ :
+
+\begin{algo}[vlined]
+Pré-traitement\;
+\# \surligneur{Démontrer} que $I$ est vrai avec les préconditions et le pré-traitement.\;
+\Tq{$condition$}   {  
+  \# Au début d'une itération, $I$ et $condition$ sont vrais.\;
+  corps de la boucle\;  
+  \# \surligneur{Démontrer} que $I$ est toujours vrai en fin d'itération.\;}
+\# {\bfseries Alors} $I$ est vrai et $condition$ est faux.\;
+Post-traitement\;
+\# \surligneur{Démontrer} que $I$, la $condition$ fausse et le post-traitement valident les post-conditions.\;
+\end{algo}
+
+
+\section{Poursuivre le travail}
+
+\begin{itemize}
+	\item Dans cette version, au final, le nombre de cartes distribuées à chaque joueur et le nombre restant de cartes sont exactement le quotient et le reste dans la division euclidienne de la taille du paquet de départ par le nombre de joueur. On peut demander aux élèves d'ajouter cette proposition aux post-conditions et de la démontrer (au moins de trouver un invariant pour le démontrer).
+	\item Assez rapidement après cette activité et les exercices qui doivent suivre pour assoir la notion, il semble important de travailler la terminaison en commençant par finir la correction de l'algorithme présenté ici.
+\end{itemize}

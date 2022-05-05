@@ -1,0 +1,78 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{eiem}[2022/04/16 v1.00 style EIEM de l'IREM de Nantes]
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage[french]{babel}
+\RequirePackage{amssymb}
+\RequirePackage{pifont}
+\PassOptionsToPackage{usenames,dvipsnames,x11names,svgnames}{xcolor}
+\RequirePackage[width=17cm,height=27cm,includeheadfoot]{geometry}
+\RequirePackage[indent,skip=1em]{parskip}
+\setlength{\parindent}{0pt}
+\RequirePackage{multicol}
+\RequirePackage{enumitem}
+\renewcommand{\thechapter}{\Roman{chapter}}
+\usepackage[explicit, clearempty, compact]{titlesec}
+\titleformat{\chapter}[block]{}{}{0pt}
+{\rule{\textwidth}{0.4pt}\\
+\centering\hfill{\bfseries\LARGE#1}\\
+\rule{\textwidth}{0.4pt}}
+\titlespacing{\chapter}{0pt}{*0}{*0}
+\renewcommand{\thesection}{\arabic{section}.}
+\titleformat{\section}{}{}{0pt}
+{\bfseries\Large\thesection~#1}
+\renewcommand{\thesubsection}{\thesection\arabic{subsection}.}
+\titleformat{\subsection}{}{}{0pt}
+{\bfseries\large\thesubsection~#1}
+\usepackage[hidelinks]{hyperref}
+\usepackage[varl]{inconsolata}
+\RequirePackage[output-decimal-marker={,}]{siunitx}
+\newcommand{\resume}[1]{{\bfseries Résumé :} #1}
+\newcommand{\surligneur}[2][yellow]{\colorbox{#1}{#2}}
+\newcommand{\msurligneur}[2][yellow]{\colorbox{#1}{\ensuremath{#2}}}
+\usepackage{longtable}
+\usepackage{colortbl}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash }m{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash }m{#1}}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{minted,skins,theorems}
+\tcbsubskin{fichier}{standard}{enhanced,
+frame empty,interior empty,
+beforeafter skip=0pt, arc = 0.01pt,
+listing only,breakable,
+fonttitle=\footnotesize,coltitle=black,center title,
+colbacktitle=white,
+attach boxed title to bottom center={yshift=0.1mm},
+boxed title style={frame empty},
+minted options={linenos=true,numbersep=3mm,texcl=true},
+left=0mm,right=0mm,top=0mm,bottom=0mm,enhanced,nobeforeafter,
+center,width=0.9\linewidth,}
+\newtcblisting{bash}[1][]{skin=fichier,
+colback=black!5, colframe=black!25,
+title=#1,
+minted language=bash,
+minted options={linenos=false,texcl=true}
+}
+\newtcblisting{python}[1][]{skin=fichier,
+colback=blue!5!white, colframe=blue!75!black,
+title=#1,
+minted language=python3,left=5mm,
+minted options={linenos=true,numbersep=3mm,texcl=true},
+overlay={\begin{tcbclipinterior}\fill[red!20!blue!20!white]
+(frame.north west)rectangle([xshift=5mm]frame.south west);
+\end{tcbclipinterior}}
+}
+\usepackage[french,onelanguage,longend]{algorithm2e}
+\DontPrintSemicolon
+\SetKw{Retour}{renvoyer}
+\SetKwProg{Fct}{fonction}{}{fin fonction}
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}
+\setlength{\algomargin}{3pt}
+\newcommand{\noskip}{\vspace{0pt}}
+\newcommand{\backskip}{\vspace{-2pt}}
+\SetAlgoSkip{noskip}
+\SetAlgoInsideSkip{backskip}
+\newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+\newenvironment{algo}[1][]{\begin{tcolorbox}[skin=fichier,title=#1]\begin{algorithm}[H]}{\end{algorithm}\end{tcolorbox}}

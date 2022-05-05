@@ -1,0 +1,390 @@
+\chapter{Enseigner l'algorithmique au secondaire : éloge de la lenteur}
+
+\resume{
+Introduire et distinguer l'algorithmique et la programmation au collège ou au lycée, avec une attention particulière portée à la preuve.
+}
+
+\section{Motivation}
+
+Au collège comme en classe de seconde du lycée, l'algorithmique et la programmation sont liées au début de leur enseignement à l'apprentissage des mathématiques. Ainsi les premiers exemples de programme rencontrés ont fréquemment un contexte mathématique.
+
+Est-il alors judicieux de débuter la découverte d'un langage de programmation par la présentation d'instructions telles que les suivantes?
+
+\begin{bash}[Boucle interactive de Python]
+pascal@lena$ python3
+>>> a = 228502 // 313
+>>> b = 228502 % 313
+>>> quit()
+pascal@lena$ 
+\end{bash}
+
+Ou bien l'équivalent sous la forme d'un script (programme) Python:
+
+\begin{python}[essai.py]
+a = 228502 // 313
+b = 228502 % 313
+\end{python}
+
+
+On pourra au besoin provoquer l'affichage des valeurs des variables $a$ et $b$ en fin d'exécution.
+
+Sans parler de l'utilisation du signe \frquote{\%}, déjà socialement fortement connoté pour l'élève, le sens de ces deux instructions n'est pas nécessairement évident pour qui découvre un premier langage de programmation.
+
+Que ce soit sous la forme d'instructions exécutées interactivement ou sous la forme d'un programme enregistré et exécuté, on ne peut exclure que l'élève n'en perçoive finalement que deux lignes aussi étranges que:
+\[
+\begin{array}{l}
+a \leftarrow 228502\ \clubsuit\ 313 \\
+b \leftarrow 228502\ \spadesuit\ 313 \\
+\end{array}
+\]
+
+Il apparaît dès lors malheureux de considérer les opérateurs binaires \texttt{//} et \texttt{\%} (c'est à dire le quotient entier et le reste dans la division euclidienne des entiers naturels) comme des questions réglées de longue date pour des élèves du secondaire dans le tronc commun de mathématiques (cf. programme de mathématiques expertes de classe de terminale du lycée).
+
+Ces constructions sont hélas trop vite tenues pour acquises, si l'on en juge au nombre de manuels dans lesquels on les rencontre dans les pages de \emph{vade-mecum} du langage. Est-ce pour autant satisfaisant? On peut au contraire considérer que leur signification peut être progressivement élaborée et que cette activité est en elle-même le lieu d'un apprentissage de la preuve algorithmique, où les mathématiques jouent pleinement leur rôle dans la démonstration : l'éluder serait alors une occasion pédagogique manquée.
+
+Ce que nous cherchons est démontrer un algorithme, et cette démarche sera l'occasion de travailler les deux notions mathématiques, dans les deux champs de l'algorithmique et de la programmation, tout en faisant appel aux mathématiques pour valider le travail.
+
+\section{Avec les mains}
+
+À des fins pratiques, et sans altérer la nature du problème\footnote{Pour la suite de notre propos, nous serions amenés dans ce cas à produire un algorithme comportant au moins trois-cent-treize variables de noms différents et au moins autant le double d'affectations.}, réduisons la situation à la question suivante:
+
+\frquote{Une collection comporte $\num{228502}$ vignettes que trois enfants se distribuent une par une: comment la distribution se termine-t-elle?}
+
+Il va de soi que l'on s'intéresse dans cet article à une approche naïve de la question, par ailleurs immédiatement réglée par une division. Notre contexte est celui de la découverte de l'algorithmique et de la programmation, et pour cette dernière, nous prenons pour hypothèse une expérience pouvant être résumée au tracé de quelques polygones réguliers en mode \frquote{tortue}.
+
+Par ailleurs, le choix d'un tel problème, pour simple qu'il soit, permet d'écarter toute difficulté parasite et concentre l'attention sur la question principale de répondre et justifier la réponse.
+
+Le choix d'un \frquote{grand} nombre complique l'expérience et suggère de dépasser la réalisation physique: l'élève est conduit à rechercher un moyen efficace de prévoir la réponse, sans pouvoir effectuer la distribution. 
+
+\section{L'algorithme: résoudre et prouver}
+
+Nous proposons une version presque \frquote{débranchée} de l'algorithme, volontairement proche de l'expérience réalisée avec les mains.
+
+\begin{algo}[Algorithme 1 : distribution]
+$x$ $\leftarrow$ $228502$\;
+$m$ $\leftarrow$ $x$\;
+$a$ $\leftarrow$ $0$\;
+$b$ $\leftarrow$ $0$\;
+$c$ $\leftarrow$ $0$\;
+\While{$x$ $\geqslant$ $3$}{
+    $x$ $\leftarrow$ $x - 3$\;
+    $a$ $\leftarrow$ $a + 1$\;
+    $b$ $\leftarrow$ $b + 1$\;
+    $c$ $\leftarrow$ $c + 1$\;
+}
+\end{algo}
+
+Nous nommons $x$ le nombre de vignettes à distribuer et $a$, $b$, $c$ le nombre de vignettes reçues respectivement par chacun des trois enfants.
+
+Sous cette forme, l'algorithme est une représentation de l'expérience réelle: on prélève les vignettes trois par trois et on répartit équitablement chaque prélèvement, tant que cette opération est possible.
+
+La solution proposée reste, malgré son aspect naïf, fidèle à l'expérience physique du partage: on \frquote{visualise} assez aisément comment les vignettes passent de main en main.
+
+Il reste à s'interroger sur les valeurs finales des variables, et particulièrement en vérifiant que l'algorithme \emph{termine} et donne un \emph{résultat conforme} à son intention (et idéalement, pour toute instance de la donnée en entrée).
+
+
+
+\subsection{Discussions}
+
+L'algorithme présenté comporte pourtant quelque subtilité, pour nous permettre de concentrer notre attention sur la justification\footnote{L'intention est la création d'un contexte simple favorable à une démonstration, par des arguments accessibles à de jeunes élèves.}: il s'agit de démontrer que l'algorithme termine, et que le résultat délivré est correct. Une autre question, qui vient plus tard dans les apprentissages est celle de la mesure des performances de l'algorithme: la \emph{complexité} mesure l'économie de mémoire et de temps d'exécution.
+
+Nous examinerons pour notre problème, une fois l'algorithme démontré.
+
+\subsection{Preuve de correction}
+
+C'est dans cette tache que la variable~$m$ justifie son utilité: son rôle de mémoire est central pour la preuve. Ainsi, à chaque passage dans la boucle \texttt{tant\_que}, les propriétés suivantes sont conservées:
+\[
+\left\lbrace
+\begin{array}{l}
+x \geqslant 3 \\
+a = b = c \\
+m = a + b + c + x \\
+\end{array}
+\right.
+\]
+
+Il s'agit ici de mettre en œuvre la notion d'\emph{invariant de boucle} ; la conservation réside en:
+\[
+\begin{array}{lcl}
+m & = & \left(x - 3\right) + \left(a + 1\right) + \left(b + 1\right) + \left(c + 1\right) \\
+m & = & a + b + c + x \\
+\end{array}
+\]
+
+complétée par $m = x$ avant l'entrée dans la boucle\footnote{On ne manquera pas de faire noter en classe que $\left(x - 3\right)$, $\left(a + 1\right)$, $\left(b + 1\right)$ et $\left(c + 1\right)$ deviendront respectivement les futures valeurs de $x$, $a$, $b$ et $c$ pour l'itération suivante.}.
+
+Entre le début et la fin de l'exécution de la boucle, les trois enfants reçoivent à chaque tour (chaque passage dans le corps de la boucle effectue la répartition de trois vignettes entre eux, puisqu'elle y est possible) chacun une vignette, tandis que le nombre de vignettes encore à distribuer diminue de trois~vignettes à chaque étape : les gains des trois enfants restent égaux à chaque étape.
+
+Ainsi, à chaque étape, nous avons $a = b = c$ donc $m = 3\,a + x$, et, après la boucle, il demeure: $m = 3\,a + x$ avec $0 \leqslant x < 3$. Par unicité du quotient et du reste, nous avons donc $a$ quotient entier et $x$ reste, dans la division considérée.
+
+Nous avons montré que nous avons obtenu un résultat conforme à la définition usuelle:
+\[
+\forall \left( a , b \right) \in \mathbb{N} \times \mathbb{N}^{\star},\ \exists! \left( p , q \right) \in \mathbb{N} \times \mathbb{N}, \ a = b \times p + q \ \text{et}\ 0 \leqslant q < b
+\]
+
+\subsection{Preuve de terminaison}
+
+Il s'agit ici de mettre en œuvre la notion de \emph{variant de boucle}.
+
+L'observation de l'évolution de la variable~$x$ conduit à:
+
+\begin{itemize}
+
+\item le nombre~$x$ est un entier naturel;
+
+\item soit $x < 3$, dans ce cas la distribution est (possiblement d'emblée) achevée (et $x$~vignettes ne sont pas distribuées) ;
+
+\item soit $x$ est amené à diminuer de $3$ à chaque passage de boucle. Le nombre entier naturel finit être plus petit que $3$, ce qui termine l'exécution de la boucle.
+
+On justifie ici \emph{mathématiquement} la terminaison: une suite minorée décroissante de nombres entiers naturels possède un plus petit élément (idée mathématique intuitive, même si elle n'est pas étudiée pour elle au secondaire).
+
+\end{itemize}
+
+%Il reste à identifier que les nombres $a$, $b$, $c$ et $x$ sont respectivement le quotient entier et le reste dans la division euclienne.
+%
+%\textcolor{red}{à écrire}
+
+
+
+Nous sommes donc assurés que l'algorithme est efficace et termine toute exécution, et mieux, ce sera encore le cas pour toute autre valeur entière naturelle que $\num{228502}$.
+
+
+\subsection{Coût de l'algorithme: complexité}
+
+Il s'agit de mesurer le temps d'exécution\footnote{On parle d'une durée d'exécution \frquote{abstraite}, indépendante de tout matériel.}, considéré comme fonction de certains paramètres comme la taille de la donnée en entrée ou le nombres d'instructions à exécuter pour mener à bien la tache.
+
+Sans entrer ici dans le détail\footnote{L'étude de cette notion relève des programmes de la spécialité \frquote{Numérique et Science Informatique} du lycée.}, nous pouvons faire percevoir aux élèves que le nombre de passages dans la boucle est égal au quotient entier, lui-même inférieur au nombre à diviser (la donnée de l'algorithme): l'algorithme possède donc un coût linéaire.
+
+%\textcolor{red}{à détailler plus ?}
+
+
+
+\section{Programmer: réaliser et utiliser}
+
+
+En procédant ainsi, nous avons à ce stade proposé à l'élève de justifier l'algorithme. Il s'agit d'une attitude à favoriser dans un apprentissage de l'algorithmique et de la programmation. Cette posture sera complétée lors du passage à la programmation effective, par les tests unitaires qui ne peuvent suffire à eux seuls à valider une solution.
+
+Une fois l'algorithme démontré, on peut passer à sa réalisation, et procéder à sa programmation dans un langage informatique.
+
+Voici une traduction ligne à ligne de l'algorithme dans le langage de programmation \mbox{Python\,3}:
+
+\begin{python}[distribution.py]
+x = 228502
+
+m = x
+
+a = 0
+b = 0
+c = 0
+
+while x >= 3:
+	x -= 3 # équivaut à: x = x - 3
+	a += 1
+	b += 1
+	c += 1
+
+print(x)
+
+print(a)
+print(b)
+print(c)
+\end{python}
+
+On remarque un choix de rédaction du code: écrire de manière équivalente \mbox{\frquote{\texttt{x -= 3}}} en lieu et place de \mbox{\frquote{\texttt{x = x - 3}}}. Il y a ici une question pédagogique non tranchée, et le choix retenu est celui d'éviter une confusion entre écriture mathématique (une équation sans solution) et l'affectation (notion algorithmique). On échange une difficulté pour une autre difficulté: le dilemme reste à examiner avec l'élève.
+
+Nous pouvons commencer par simplifier l'algorithme : une fois démontré, nous pouvons n'en conserver que l'essentiel, c'est-à-dire la détermination du quotient entier et du reste.
+
+Nous pouvons à présent poursuivre par la suppression des variables redondantes, dans la mesure où, pour chaque étape, les variables~$a$, $b$ et $c$ possèdent des valeurs toujours égales entre elles:
+
+\begin{python}[distribution2.py]
+x = 228502
+
+a = 0
+
+while x >= 3:
+	x -= 3
+	a += 1
+
+print(x) # x est le reste
+
+print(a) # a est le quotient entier
+\end{python}
+
+
+
+Ayant identifié que les dernières valeurs des nombres~$a$ (ou $b$ ou $c$) et $x$ donnent respectivement le quotient entier et le reste, on peut s'intéresser à la réalisation d'une boîte à outils (qu'on nommera ensuite \frquote{librairie} ou \frquote{module} en terminologie~Python), avec la création de deux fonctions (routines) que l'utilisateur pourra employer à volonté dans tout programme, sans avoir à connaître les détails des outils, mais seulement leur spécification.
+
+De manière analogue, on supprime la variable~$m$: son rôle est limité à la démonstration de l'algorithme.
+
+\section{Les fonctions}
+
+On ne manquera pas de remarquer que, pour l'algorithme précédent, le calcul du quotient et du reste sont conduits simultanément. On peut séparer l'algorithme en deux calculs. Cette observation ouvre la voie à l'écriture de deux fonctions distinctes (de deux arguments chacune) dont la valeur de retour (le résultat) est un nombre et non un couple (retourner un résultat dont la nature est un objet plutôt qu'un scalaire peut constituer un autre obstacle dans les apprentissages).
+
+
+
+\subsection{Le calcul du reste dans une division par \num{3}}
+
+Il suffit d'éliminer les instructions inutiles dans l'algorithme initial, à savoir celles concernant le quotient~$a$.
+
+\begin{python}[distribution3.py]
+def reste_par_3(x):
+	'''
+	Calcul du reste de x dans la division par 3
+	'''
+	while x >= 3:
+		x -= 3
+	return x
+	
+print(reste_par_3(228502))
+\end{python}
+
+
+
+\subsection{Le calcul du quotient entier dans la division par \num{3}}
+
+On procède de la même manière. On fera toutefois observer ici que la préservation de l'une des variables~$a$, $b$ et $c$ est essentielle, puisque cette valeur calcule le reste.
+
+\begin{python}[distribution3.py]
+def quotient_entier_par_3(x):
+	'''
+	Calcul du quotient entier de x dans la division par 3
+	'''
+	a = 0
+	
+	while x >= 3:
+		x -= 3
+		a += 1
+		
+	return a
+	
+print(quotient_entier_par_3(228502))
+\end{python}
+
+
+
+\subsection{Généralisation}
+
+Pour des raisons de progressivité, nous avons préféré séparer les étapes, en fixant d'abord une division par le nombre~$3$. Il est souhaitable de généraliser ensuite à toute division euclidienne, en créant cette fois deux fonctions de plusieurs arguments (dividende et diviseur).
+
+On présente le module \frquote{division4.py} complet:
+
+\begin{python}[distribution4.py]
+def reste(x, y):
+	'''
+	Calcul du reste dans la division euclidienne de x par y
+	'''
+	while x >= y:
+		x -= y
+	return x
+	
+def quotient_entier(x, y):
+	'''
+	Calcul du quotient entier dans la division de x par y
+	'''
+	a = 0
+	
+	while x >= 3:
+		x -= 3
+		a += 1
+		
+	return a
+
+if __name__ == "__main__":
+	'''
+	Exemples de calculs
+	'''
+	print(quotient_entier(228502, 3))
+	print(reste(228502, 3))
+\end{python}
+
+
+\subsection{Prolongements}
+
+Il serait pertinent de présenter un autre style de conception, en ayant recours à la \emph{récursivité}\footnote{Ce paradigme présente de nombreux intérêts: outre la robustesse, il évite notamment la gestion par le concepteur de variables et de leurs états, ainsi que les erreurs qui accompagnent cette gestion.} qui est le pendant algorithmique de la notion de récurrence en mathématiques: son intérêt réside dans l'élaboration d'algorithmes et programmes qui seront alors la transcription fidèle des propriétés mathématiques du quotient et du reste dans la division euclidienne.
+
+Considérons seulement le calcul du reste. De la définition:
+\[
+\forall \left( a , b \right) \in \mathbb{N} \times \mathbb{N}^{\star},\ \exists! \left( p , q \right) \in \mathbb{N} \times \mathbb{N}, \ a = b \times p + q \ \text{et}\ 0 \leqslant q < b
+\]
+
+nous pouvons tirer, pour $a \geqslant b$:
+\[
+\forall \left( a , b \right) \in \mathbb{N} \times \mathbb{N}^{\star},\ a \geqslant b,\ \exists! \left( p , q \right) \in \mathbb{N} \times \mathbb{N}, \ a - b = b \times \left( p - 1 \right) + q \ \text{et}\ 0 \leqslant q < b
+\]
+
+Autrement dit, et en empruntant à la notation fonctionnelle:
+\[
+\left\lbrace
+\begin{array}{l}
+p \geqslant q,\ \textrm{reste}\!\left( p , q \right) = \textrm{reste}\!\left( p - q , q \right)\\
+p < q,\ \textrm{reste}\!\left( p , q \right) = p\\
+\end{array}
+\right.
+\]
+
+où nous définissons mathématiquement par cas une fonction~\emph{reste} de deux variables :
+\[
+\textrm{reste} : \mathbb{N} \times \mathbb{N}^{\star} \mapsto \mathbb{N}
+\]
+
+Cette remarque permet alors la construction suivante:
+
+\begin{python}[reste.py]
+#
+# détail interne: étendre la pile d'appels du langage
+#
+import sys
+sys.setrecursionlimit(20000)
+
+def reste(p, q): # une fonction à deux arguments
+	'''
+	Calcul du reste de p dans la division euclidienne par q
+	'''
+	if p >= q:
+		return reste(p - q, q)
+	else:
+		return p
+	
+print(reste(228502, 313))
+\end{python}
+
+On retrouve alors la propriété mathématique qui apparaît pratiquement à l'identique dans le programme.
+
+La progression adoptée dans cette étude trouvera son prolongement naturel dans l'enrichissement de la \frquote{boîte à outils} précédente, par le calcul du \emph{plus grand commun diviseur} de deux entiers naturels.
+
+
+
+\section{Conclusions}
+
+Nous avons examiné, à l'aide d'outils rudimentaires, les calculs de quotient entier et de reste dans la division euclidienne des entiers naturels (et ainsi préparé le terrain pour d'autres divisions euclidiennes, comme par exemple, dans les anneaux de polynômes...).
+
+Cette étude achevée, on peut annoncer aux élèves l'idée que les concepteurs du langage ont préparé ce travail et en donnent une version \emph{immédiatement\footnote{L'utilisateur n'a rien à concevoir pour utiliser directement les opérateurs \texttt{//} et \texttt{\%}.}} utilisable, sous la forme des écritures infixées présentées en début d'article:
+
+\begin{python}[essai2.py]
+a = 228502 // 313 # quotient\_entier(228502, 313)
+b = 228502 % 313  # reste(228502, 313)
+\end{python}
+
+Il est intéressant ici de bien faire percevoir dans son intégralité le processus de conception qui a présidé à la réalisation de la boîte à outils: si un tel cheminement n'est matériellement pas généralisable dans le cadre de programmes scolaires contraints par le temps d'enseignement disponible en classe, être conscient de son existence présente néanmoins un intérêt pour les élèves qui suivront la spécialité~\frquote{numérique et science informatique} du baccalauréat.
+
+Les premiers contacts de l'élève avec l'algorithmique et programmation méritent un soin particulier. On peut attendre une clarification et donc un bénéfice de cette distinction entre les deux domaines: offrir une telle une occasion, au moins une fois dans le cursus scolaire, paraît hautement profitable.
+
+On trouvera \textcolor{red}{\href{./programmes.tar.xz}{ici}} tous les codes source des programmes de l'article.
+
+
+
+\section{Références}
+
+\begin{itemize}
+
+\item Gilles Dowek, Les principes des langages de programmation -- Éditions de l'ÉEcole Polytechnique
+
+\medskip
+\item Pascal Manoury, programmation de droite à gauche et vice-versa -- Éditions Paracamplus
+
+\medskip
+\item Tangente, ouvrage collectif, Les algorithmes : au cœur du raisonnement - Hors~série~37 -- Éditions Pôle
+
+\end{itemize}
+
+

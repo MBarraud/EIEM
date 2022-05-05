@@ -1,0 +1,306 @@
+%    \iffalse meta-comment
+%
+% Dévelopé par Mickaël Barraud
+% mickael.barraud@ac-nantes.fr
+% En colaboration avec le groupe EIEM de l'IREM de Nantes
+%
+% Copyright (C) 2022
+% This file may be distributed and/or modified under the conditions of
+% the LaTeX Project Public License (LPPL), either version 1.3c of
+% this license or (at your option) any later version.  The latest
+% version of this license is in the file:
+%
+%   http://www.latex-project.org/lppl.txt
+%<*internal>
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\Msg{*** Génération du fichier du package ***}
+\nopreamble\nopostamble
+\generate{\file{\jobname.sty}{\from{\jobname.dtx}{eiem}}}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+%<*eiem>
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{eiem}[2022/04/16 v1.00 style EIEM de l'IREM de Nantes]
+%</eiem>
+%<*driver>
+\documentclass{ltxdoc}
+\RecordChanges
+\begin{document}
+  \DocInput{eiem.dtx}
+  \PrintIndex
+  \PrintChanges
+\end{document}
+%</driver>
+%<*eiem>
+%    \fi
+%    \CheckSum{0}
+%    \StopEventually{}
+%
+%
+%    \changes{1.0}{2022/04/16}{Première version}
+%
+%    \title{Package de prodution du groupe EIEM de l'IREM de Nantes}
+%    \author{Pascal CHAUVIN \and Mickaël BARRAUD}
+%
+%    \maketitle
+%    \tableofcontents
+%
+%    \section{Introduction}
+%
+%    Package produit pour uniformiser les productions du groupe EIEM
+%    de l'IREM de Nantes
+%
+%    \section{Interface utilisateur}
+%
+%    Inclure la feuille de style avec la commande
+%    \begin{verbatim}
+%    \usepackage{eiem}
+%    \end{verbatim}
+%    Pas d'option.
+%
+%    \section{Dépendances}
+%    Pour pouvoir écrire le texte source sous soucis de caractère :
+%    \begin{macrocode}
+\RequirePackage[utf8]{inputenc}
+%    \end{macrocode}
+%    Pour un encodage propre des caractères de sortie sur le pdf :
+%    \begin{macrocode}
+\RequirePackage[T1]{fontenc}
+%    \end{macrocode}
+%    Pour assurer des caractères vectoriels :
+%    \begin{macrocode}
+\RequirePackage{lmodern}
+%    \end{macrocode}
+%    Pour les règles typographiques françaises :
+%    \begin{macrocode}
+\RequirePackage[french]{babel}
+%    \end{macrocode}
+%    Pour le symbole |\geqslant| par exemple
+%    \begin{macrocode}
+\RequirePackage{amssymb}
+%    \end{macrocode}
+%    Pour les caratères en |\ding{}|
+%    \begin{macrocode}
+\RequirePackage{pifont}
+%    \end{macrocode}
+%    Pour
+%    \begin{macrocode}
+\PassOptionsToPackage{usenames,dvipsnames,x11names,svgnames}{xcolor}
+%    \end{macrocode}
+%
+%    \section{Mise en page}
+%
+%    \begin{macrocode}
+\RequirePackage[width=17cm,height=27cm,includeheadfoot]{geometry}
+\RequirePackage[indent,skip=1em]{parskip}
+\setlength{\parindent}{0pt}  
+%    \end{macrocode} 
+%
+%    Écrire sur plusieures colones
+%
+%    \begin{macrocode}
+\RequirePackage{multicol} 
+%    \end{macrocode} 
+%
+%    Pour pouvoir custumiser les listes
+%
+%    \begin{macrocode}
+\RequirePackage{enumitem}
+%    \end{macrocode} 
+%
+%    \subsection{Les chapitres, sections, et subsections}
+%
+%    Chapitre LARGE précédé et suivi de deux traits
+%    horizotaux, sans espacement particulier, 
+%    Numérotation par chiffres romains, non représentée 
+%
+%    \begin{macrocode}
+\renewcommand{\thechapter}{\Roman{chapter}}
+\usepackage[explicit, clearempty, compact]{titlesec}
+\titleformat{\chapter}[block]{}{}{0pt}
+{\rule{\textwidth}{0.4pt}\\
+\centering\hfill{\bfseries\LARGE#1}\\
+\rule{\textwidth}{0.4pt}}
+\titlespacing{\chapter}{0pt}{*0}{*0}
+%    \end{macrocode}  
+%
+%    Sections numérotées sans référence au numéro de chapitre
+%
+%    \begin{macrocode}
+\renewcommand{\thesection}{\arabic{section}.}
+\titleformat{\section}{}{}{0pt}
+{\bfseries\Large\thesection~#1}
+%    \end{macrocode}  
+%
+%    Subsections numérotées avec référence 
+%    au numéro de section
+%
+%    \begin{macrocode}
+\renewcommand{\thesubsection}{\thesection\arabic{subsection}.}
+\titleformat{\subsection}{}{}{0pt}
+{\bfseries\large\thesubsection~#1}
+%    \end{macrocode}  
+%
+%    \section{Mise en forme}
+%
+%    Pour permetre de faire des liens (non mis en valeur).
+%    En particulier la table des matières devient interactive
+%
+%    \begin{macrocode}
+\usepackage[hidelinks]{hyperref}
+%    \end{macrocode} 
+%    Font préconisée pour les scripts
+%
+%    \begin{macrocode}
+\usepackage[varl]{inconsolata}
+%    \end{macrocode}  
+%
+%    Système métrique
+%    \begin{macrocode}
+\RequirePackage[output-decimal-marker={,}]{siunitx}
+%    \end{macrocode}  
+%    \subsection{Quelques macros}
+%
+%    \begin{macro}{\resume}
+%    Mise en page du résumé introductif à un article.
+%    \begin{macrocode}
+\newcommand{\resume}[1]{{\bfseries Résumé :} #1}
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\surligneur}
+%    Surligne le texte en jaune ou dans la couleur 
+%    passée en option
+%    \begin{macrocode}
+\newcommand{\surligneur}[2][yellow]{\colorbox{#1}{#2}}
+%    \end{macrocode}
+%    \end{macro}
+%
+%    \begin{macro}{\msurligneur}
+%    Surligneur en mode mathématique
+%    \begin{macrocode}
+\newcommand{\msurligneur}[2][yellow]{\colorbox{#1}{\ensuremath{#2}}}
+%    \end{macrocode} 
+%    \end{macro} 
+%
+%    \subsection{Les tableau}
+%
+%    Pour des tableau sur plus d'une page.
+%
+%    \begin{macrocode} 
+\usepackage{longtable}
+%    \end{macrocode} 
+%
+%    Pour colorier certaines cases.
+%
+%    \begin{macrocode} 
+\usepackage{colortbl}
+%    \end{macrocode} 
+%
+%    Pour dimentionner les cases d'un tabular.
+%
+%    \begin{macrocode} 
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash }m{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash }m{#1}}
+%    \end{macrocode} 
+%    \subsection{Présentation encadrés (de codes)}
+%
+%    \begin{macrocode}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{minted,skins,theorems}
+\tcbsubskin{fichier}{standard}{enhanced,
+frame empty,interior empty,
+beforeafter skip=0pt, arc = 0.01pt,
+listing only,breakable,
+fonttitle=\footnotesize,coltitle=black,center title,
+colbacktitle=white,
+attach boxed title to bottom center={yshift=0.1mm},
+boxed title style={frame empty},
+minted options={linenos=true,numbersep=3mm,texcl=true},
+left=0mm,right=0mm,top=0mm,bottom=0mm,enhanced,nobeforeafter,
+center,width=0.9\linewidth,}
+%    \end{macrocode}  
+%
+%    Différentes mise en forme de codes sources
+%    \begin{environment}{bash}
+%    Environnemnt affichant dans un cardre gris du
+%    code de langage bash.
+%    \begin{macrocode}
+\newtcblisting{bash}[1][]{skin=fichier,
+colback=black!5, colframe=black!25,
+title=#1,
+minted language=bash,
+minted options={linenos=false,texcl=true}
+}
+%    \end{macrocode}  
+%    \end{environment}
+%
+%    \begin{environment}{python}
+%    Environnemnt affichant dans un cardre bleu du
+%    code de langage Python avec numérotation des lignes.
+%    \begin{macrocode}
+\newtcblisting{python}[1][]{skin=fichier,
+colback=blue!5!white, colframe=blue!75!black, 
+title=#1,
+minted language=python3,left=5mm,
+minted options={linenos=true,numbersep=3mm,texcl=true},
+overlay={\begin{tcbclipinterior}\fill[red!20!blue!20!white]
+(frame.north west)rectangle([xshift=5mm]frame.south west);
+\end{tcbclipinterior}}
+}
+%    \end{macrocode}  
+%    \end{environment}
+%
+%    \begin{environment}{algorithm}
+%    Écriture d'agorithmes.\\
+%    vlined fait disparaitre les fin... (ou lined ou noline)\\
+%    longend peut être shortend (par défaut) ou noend\\
+%    |\DontPrintSemicolon| n'affiche pas les << ; >>\\
+%    |\SetKw| redéfinit un mot clef\\
+%    |\SetKwProg| redéfinit un nouveau mot clef\\
+%    |\nonl| retire la numérotation d'une ligne
+%
+%    \begin{macrocode}
+\usepackage[french,onelanguage,longend]{algorithm2e} 
+\DontPrintSemicolon
+\SetKw{Retour}{renvoyer}
+\SetKwProg{Fct}{fonction}{}{fin fonction}
+\newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}
+\setlength{\algomargin}{3pt}
+\newcommand{\noskip}{\vspace{0pt}}
+\newcommand{\backskip}{\vspace{-2pt}}
+\SetAlgoSkip{noskip}
+\SetAlgoInsideSkip{backskip}
+\newcommand\mycommfont[1]{\footnotesize\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+%    \end{macrocode}  
+%    \end{environment}
+%
+%    \begin{environment}{algo}
+%    Pour une inclusion commme figure.
+%    \begin{macrocode}
+\newenvironment{algo}[1][]{\begin{tcolorbox}[skin=fichier,title=#1]\begin{algorithm}[H]}{\end{algorithm}\end{tcolorbox}}
+%    \end{macrocode}  
+%    \end{environment}
+%
+%
+% \Finale
+%
+\endinput
+%
+%</eiem>
